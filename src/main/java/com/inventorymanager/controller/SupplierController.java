@@ -1,13 +1,17 @@
 package com.inventorymanager.controller;
 
+import com.inventorymanager.controller.shared.SuccessResponseEntity;
 import com.inventorymanager.domain.supplier.Supplier;
 import com.inventorymanager.service.supplier.Dtos.SupplierCreateDto;
 import com.inventorymanager.service.supplier.Dtos.SupplierReadDto;
 import com.inventorymanager.service.supplier.Dtos.SupplierUpdateDto;
 import com.inventorymanager.service.supplier.ISupplierService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,9 +22,12 @@ public class SupplierController {
     private ISupplierService supplierService;
 
     @GetMapping("/{id}")
-    public SupplierReadDto getSupplierById(@PathVariable UUID id) {
-        System.out.println(id);
-        return supplierService.getSupplierById(id);
+    public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> getSupplierById(@PathVariable UUID id) {
+        SupplierReadDto supplierReadDto = supplierService.getSupplierById(id);
+
+        SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(supplierReadDto)));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
@@ -30,7 +37,7 @@ public class SupplierController {
 
 
     @PostMapping
-    public SupplierReadDto createSupplier(@RequestBody SupplierCreateDto supplierCreateDto) {
+    public SupplierReadDto createSupplier(@RequestBody @Valid SupplierCreateDto supplierCreateDto) {
         return supplierService.createSupplier(supplierCreateDto);
     }
 
