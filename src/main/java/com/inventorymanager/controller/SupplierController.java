@@ -3,6 +3,7 @@ package com.inventorymanager.controller;
 import com.inventorymanager.domain.supplier.Supplier;
 import com.inventorymanager.service.supplier.Dtos.SupplierCreateDto;
 import com.inventorymanager.service.supplier.Dtos.SupplierReadDto;
+import com.inventorymanager.service.supplier.Dtos.SupplierUpdateDto;
 import com.inventorymanager.service.supplier.ISupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,13 @@ public class SupplierController {
 
 
     @PostMapping
-    public Supplier createSupplier(@RequestBody SupplierCreateDto supplierCreateDto) {
+    public SupplierReadDto createSupplier(@RequestBody SupplierCreateDto supplierCreateDto) {
         return supplierService.createSupplier(supplierCreateDto);
     }
 
     @PatchMapping("/{id}")
-    public Supplier updateSupplier(@PathVariable UUID id, @RequestBody Supplier newSupplier) {
-        return supplierService.updateSupplier(id, newSupplier);
+    public SupplierReadDto updateSupplier(@PathVariable UUID id, @RequestBody SupplierUpdateDto supplierUpdateDto) {
+        return supplierService.updateSupplier(id, supplierUpdateDto);
     }
 
     @DeleteMapping("/{id}")

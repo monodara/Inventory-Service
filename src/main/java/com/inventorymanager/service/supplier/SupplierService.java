@@ -4,6 +4,7 @@ import com.inventorymanager.domain.supplier.ISupplierRepo;
 import com.inventorymanager.domain.supplier.Supplier;
 import com.inventorymanager.service.supplier.Dtos.SupplierCreateDto;
 import com.inventorymanager.service.supplier.Dtos.SupplierReadDto;
+import com.inventorymanager.service.supplier.Dtos.SupplierUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,14 +31,18 @@ public class SupplierService implements ISupplierService{
     }
 
     @Override
-    public Supplier createSupplier(SupplierCreateDto supplierCreateDto) {
+    public SupplierReadDto createSupplier(SupplierCreateDto supplierCreateDto) {
         Supplier supplier = supplierMapper.toSupplier(supplierCreateDto);
-        return supplierRepo.createSupplier(supplier);
+        Supplier supplierCreated = supplierRepo.createSupplier(supplier);
+        return supplierMapper.toReadDto(supplierCreated);
     }
 
     @Override
-    public Supplier updateSupplier(UUID id, Supplier newSupplier) {
-        return supplierRepo.updateProduct(id, newSupplier);
+    public SupplierReadDto updateSupplier(UUID id, SupplierUpdateDto supplierUpdateDto) {
+        Supplier supplier = supplierRepo.getSupplierById(id);
+        supplierMapper.updateSupplierFromDto(supplierUpdateDto, supplier);
+        Supplier supplierUpdated = supplierRepo.updateSupplier(supplier);
+        return supplierMapper.toReadDto(supplierUpdated);
     }
 
     @Override

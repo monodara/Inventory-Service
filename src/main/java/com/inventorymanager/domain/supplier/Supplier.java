@@ -19,13 +19,13 @@ public class Supplier {
     @Column(nullable = false)
     private UUID id;
 
-    @Column(columnDefinition = "VARCHAR(20)", length = 20, nullable = false)
+    @Column(columnDefinition = "VARCHAR(20)", length = 20, nullable = false, unique = true)
     private String name;
 
-    @Column(columnDefinition = "VARCHAR(100)", length = 100)
+    @Column(columnDefinition = "VARCHAR(100)", length = 100, nullable = false)
     private String address;
 
-    @Column(columnDefinition = "VARCHAR(50)", length = 20)
+    @Column(columnDefinition = "VARCHAR(50)", length = 20, nullable = false)
     private String email;
 
     @Column(columnDefinition = "VARCHAR(11)",length = 11)
