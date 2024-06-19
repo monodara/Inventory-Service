@@ -25,7 +25,7 @@ public class Supplier {
     @Column(columnDefinition = "VARCHAR(100)", length = 100)
     private String address;
 
-    @Column(columnDefinition = "VARCHAR(20)", length = 20)
+    @Column(columnDefinition = "VARCHAR(50)", length = 20)
     private String email;
 
     @Column(columnDefinition = "VARCHAR(11)",length = 11)

@@ -2,6 +2,7 @@ package com.inventorymanager.service.supplier;
 
 import com.inventorymanager.domain.supplier.ISupplierRepo;
 import com.inventorymanager.domain.supplier.Supplier;
+import com.inventorymanager.service.supplier.Dtos.SupplierCreateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,10 @@ import java.util.UUID;
 @Service
 public class SupplierService implements ISupplierService{
     @Autowired
-    ISupplierRepo supplierRepo;
+    private ISupplierRepo supplierRepo;
+    @Autowired
+    private SupplierMapper supplierMapper;
+
     @Override
     public Supplier getSupplierById(UUID id) {
         return supplierRepo.getSupplierById(id);
@@ -23,7 +27,8 @@ public class SupplierService implements ISupplierService{
     }
 
     @Override
-    public Supplier createSupplier(Supplier supplier) {
+    public Supplier createSupplier(SupplierCreateDto supplierCreateDto) {
+        Supplier supplier = supplierMapper.toSupplier(supplierCreateDto);
         return supplierRepo.createSupplier(supplier);
     }
 

@@ -1,6 +1,7 @@
 package com.inventorymanager.controller;
 
 import com.inventorymanager.domain.supplier.Supplier;
+import com.inventorymanager.service.supplier.Dtos.SupplierCreateDto;
 import com.inventorymanager.service.supplier.ISupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,8 @@ public class SupplierController {
 
 
     @PostMapping
-    public Supplier createSupplier(@RequestBody Supplier supplier) {
-        return supplierService.createSupplier(supplier);
+    public Supplier createSupplier(@RequestBody SupplierCreateDto supplierCreateDto) {
+        return supplierService.createSupplier(supplierCreateDto);
     }
 
     @PatchMapping("/id")

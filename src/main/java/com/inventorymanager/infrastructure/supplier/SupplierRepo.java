@@ -30,15 +30,16 @@ public class SupplierRepo implements ISupplierRepo {
 
     @Override
     public Supplier updateProduct(UUID id, Supplier newSupplier) {
-        return supplierJpaRepo.findById(id)
-                .map(existingProduct -> {
-                    existingProduct.setName(newSupplier.getName());
-                    existingProduct.setEmail(newSupplier.getEmail());
-                    existingProduct.setPhone(newSupplier.getPhone());
-                    existingProduct.setAddress(newSupplier.getAddress());
-                    return supplierJpaRepo.save(existingProduct);
-                })
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+//        return supplierJpaRepo.findById(id)
+//                .map(existingProduct -> {
+//                    existingProduct.setName(newSupplier.getName());
+//                    existingProduct.setEmail(newSupplier.getEmail());
+//                    existingProduct.setPhone(newSupplier.getPhone());
+//                    existingProduct.setAddress(newSupplier.getAddress());
+//                    return supplierJpaRepo.save(existingProduct);
+//                })
+//                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+        return null;
     }
 
     @Override
