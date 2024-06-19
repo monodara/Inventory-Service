@@ -1,5 +1,6 @@
 package com.inventorymanager.infrastructure;
 
+import com.inventorymanager.domain.exception.ResourceNotFoundException;
 import com.inventorymanager.domain.supplier.ISupplierRepo;
 import com.inventorymanager.domain.supplier.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,26 +15,38 @@ public class SupplierRepo implements ISupplierRepo {
     private ISupplierJpaRepo supplierJpaRepo;
     @Override
     public Supplier getSupplierById(UUID id) {
-        return supplierJpaRepo.getById(id);
+        return supplierJpaRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
     @Override
     public List<Supplier> getAllSuppliers() {
-        return null;
+        return supplierJpaRepo.findAll();
     }
 
     @Override
-    public Supplier createSupplier(Supplier Supplier) {
-        return null;
+    public Supplier createSupplier(Supplier supplier) {
+        return supplierJpaRepo.save(supplier);
     }
 
     @Override
     public Supplier updateProduct(UUID id, Supplier newSupplier) {
-        return null;
+        return supplierJpaRepo.findById(id)
+                .map(existingProduct -> {
+                    existingProduct.setName(newSupplier.getName());
+                    existingProduct.setEmail(newSupplier.getEmail());
+                    existingProduct.setPhone(newSupplier.getPhone());
+                    existingProduct.setAddress(newSupplier.getAddress());
+                    return supplierJpaRepo.save(existingProduct);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
 
     @Override
     public void deleteSupplier(UUID id) {
-
+        if (supplierJpaRepo.existsById(id)) {
+            supplierJpaRepo.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Supplier not found");
+        }
     }
 }

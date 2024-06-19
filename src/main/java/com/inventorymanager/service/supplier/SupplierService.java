@@ -19,7 +19,7 @@ public class SupplierService implements ISupplierService{
     }
 
     @Override
-    public Supplier createSupplier(Supplier Supplier) {
+    public Supplier createSupplier(Supplier supplier) {
         return null;
     }
 
