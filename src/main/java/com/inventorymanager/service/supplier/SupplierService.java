@@ -28,7 +28,7 @@ public class SupplierService implements ISupplierService{
     }
 
     @Override
-    public Supplier updateProduct(UUID id, Supplier newSupplier) {
+    public Supplier updateSupplier(UUID id, Supplier newSupplier) {
         return supplierRepo.updateProduct(id, newSupplier);
     }
 
