@@ -1,4 +1,4 @@
-package com.inventorymanager.infrastructure;
+package com.inventorymanager.infrastructure.supplier;
 
 import com.inventorymanager.domain.supplier.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
