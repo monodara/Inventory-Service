@@ -24,7 +24,6 @@ public class SupplierController {
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> getSupplierById(@PathVariable UUID id) {
         SupplierReadDto supplierReadDto = supplierService.getSupplierById(id);
-
         SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
         response.setData(new ArrayList<>(List.of(supplierReadDto)));
         return ResponseEntity.ok(response);
