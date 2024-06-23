@@ -25,7 +25,7 @@ public class Stock {
 
     //fake product
     @Column(columnDefinition = "VARCHAR(100)", length = 100, nullable = false)
-    private UUID product_id;
+    private String productId;
 
     @ManyToOne(fetch = FetchType.LAZY) //id only
     @JoinColumn(name = "supplier_id")

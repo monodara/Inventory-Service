@@ -9,7 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class StockCreateDto {
-    private UUID product_id;
+    private String productId;
     private int quantity;
-    private Supplier supplier;
+    private UUID supplierId;
 }

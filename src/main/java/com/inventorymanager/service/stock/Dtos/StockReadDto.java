@@ -1,6 +1,7 @@
 package com.inventorymanager.service.stock.Dtos;
 
 import com.inventorymanager.domain.supplier.Supplier;
+import com.inventorymanager.service.supplier.Dtos.SupplierReadDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Setter
 public class StockReadDto {
     private UUID id;
-    private UUID product_id;
+    private String productId;
     private int quantity;
-    private Supplier supplier;
+    private SupplierReadDto supplier;
 }
