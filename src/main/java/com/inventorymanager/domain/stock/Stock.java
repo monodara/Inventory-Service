@@ -1,5 +1,6 @@
-package com.inventorymanager.domain.supplier;
+package com.inventorymanager.domain.stock;
 
+import com.inventorymanager.domain.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

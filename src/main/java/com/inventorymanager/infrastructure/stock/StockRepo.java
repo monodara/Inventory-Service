@@ -2,7 +2,7 @@ package com.inventorymanager.infrastructure.stock;
 
 import com.inventorymanager.domain.exception.ResourceNotFoundException;
 import com.inventorymanager.domain.stock.IStockRepo;
-import com.inventorymanager.domain.supplier.Stock;
+import com.inventorymanager.domain.stock.Stock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
