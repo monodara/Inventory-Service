@@ -14,14 +14,14 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "stock", uniqueConstraints = @UniqueConstraint(columnNames = {"productId", "supplier_id"}))
+@Table(name = "stocks", uniqueConstraints = @UniqueConstraint(columnNames = {"productId", "supplier_id"}))
 public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)
     private UUID id;
 
-    @Column(columnDefinition = "INTEGER", nullable = false)
+    @Column(columnDefinition = "INTEGER CHECK (quantity >= 0)", nullable = false)
     private int quantity;
 
     //fake product
