@@ -37,7 +37,7 @@ public class StockController {
     }
 
     @PostMapping
-    public ResponseEntity<SuccessResponseEntity<StockReadDto>> createStock(@RequestBody StockCreateDto stockCreateDto) {
+    public ResponseEntity<SuccessResponseEntity<StockReadDto>> createStock(@RequestBody @Valid StockCreateDto stockCreateDto) {
         StockReadDto stockCreated = stockService.createStock(stockCreateDto);
         SuccessResponseEntity<StockReadDto> response = new SuccessResponseEntity<>();
         response.setData(new ArrayList<>(List.of(stockCreated)));
