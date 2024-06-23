@@ -14,6 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "stock", uniqueConstraints = @UniqueConstraint(columnNames = {"productId", "supplier_id"}))
 public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
