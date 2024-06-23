@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -28,4 +29,7 @@ public class Order {
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     private OrderStatus status = OrderStatus.PROCESSING;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 }

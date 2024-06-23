@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orderitems")
+@Table(name = "order_items")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,6 +29,6 @@ public class OrderItem {
     @JoinColumn(name = "stock_id")
     private Stock stock;
 
-    @Column
+    @Column(columnDefinition = "INTEGER CHECK (quantity >= 0)", nullable = false)
     private int quantity;
 }
