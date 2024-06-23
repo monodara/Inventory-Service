@@ -30,23 +30,34 @@ public class SupplierController {
     }
 
     @GetMapping
-    public List<SupplierReadDto> getAllSuppliers() {
-        return supplierService.getAllSuppliers();
+    public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> getAllSuppliers() {
+        List<SupplierReadDto> suppliers = supplierService.getAllSuppliers();
+        SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
+        response.setData(suppliers);
+        return ResponseEntity.ok(response);
     }
 
-
     @PostMapping
-    public SupplierReadDto createSupplier(@RequestBody @Valid SupplierCreateDto supplierCreateDto) {
-        return supplierService.createSupplier(supplierCreateDto);
+    public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> createSupplier(@RequestBody @Valid SupplierCreateDto supplierCreateDto) {
+        SupplierReadDto supplierCreated = supplierService.createSupplier(supplierCreateDto);
+        SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(supplierCreated)));
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}")
-    public SupplierReadDto updateSupplier(@PathVariable UUID id, @RequestBody SupplierUpdateDto supplierUpdateDto) {
-        return supplierService.updateSupplier(id, supplierUpdateDto);
+    public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> updateSupplier(@PathVariable UUID id, @RequestBody SupplierUpdateDto supplierUpdateDto) {
+        SupplierReadDto supplierUpdated = supplierService.updateSupplier(id, supplierUpdateDto);
+        SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(supplierUpdated)));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSupplier(@PathVariable UUID id) {
+    public ResponseEntity<SuccessResponseEntity<Boolean>> deleteSupplier(@PathVariable UUID id) {
         supplierService.deleteSupplier(id);
+        SuccessResponseEntity<Boolean> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(true)));
+        return ResponseEntity.ok(response);
     }
 }

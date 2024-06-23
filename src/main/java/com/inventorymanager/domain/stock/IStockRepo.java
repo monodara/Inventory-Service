@@ -1,6 +1,6 @@
 package com.inventorymanager.domain.stock;
 
-import com.inventorymanager.domain.supplier.Stock;
+import com.inventorymanager.domain.stock.Stock;
 
 import java.util.List;
 import java.util.UUID;
