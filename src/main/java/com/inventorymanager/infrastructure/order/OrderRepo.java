@@ -29,9 +29,6 @@ public class OrderRepo implements IOrderRepo {
 
     @Override
     public Order createOrder(Order order) {
-//        for(OrderItem orderItem: order.getOrderItems()){
-//            orderItemJpaRepo.save(orderItem);
-//        }
         return orderJpaRepo.save(order);
     }
 

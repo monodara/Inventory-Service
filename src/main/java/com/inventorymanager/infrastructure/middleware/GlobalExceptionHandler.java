@@ -3,6 +3,7 @@ package com.inventorymanager.infrastructure.middleware;
 import com.inventorymanager.controller.shared.ErrorEntity;
 import com.inventorymanager.controller.shared.ErrorResponseEntity;
 import com.inventorymanager.domain.exception.BadRequestException;
+import com.inventorymanager.domain.exception.InsufficientStockException;
 import com.inventorymanager.domain.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleBadRequestException(Exception ex){
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleInsufficientStockException(Exception ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,9 +1,12 @@
 package com.inventorymanager.service.order;
 
+import com.inventorymanager.domain.exception.InsufficientStockException;
 import com.inventorymanager.domain.order.IOrderItemRepo;
 import com.inventorymanager.domain.order.IOrderRepo;
 import com.inventorymanager.domain.order.Order;
 import com.inventorymanager.domain.order.OrderItem;
+import com.inventorymanager.domain.stock.IStockRepo;
+import com.inventorymanager.domain.stock.Stock;
 import com.inventorymanager.service.order.Dtos.OrderCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderItemCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderReadDto;
@@ -20,6 +23,9 @@ import java.util.stream.Collectors;
 public class OrderService implements IOrdeService{
     @Autowired
     private IOrderRepo orderRepo;
+
+    @Autowired
+    private IStockRepo stockRepo;
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
@@ -42,6 +48,16 @@ public class OrderService implements IOrdeService{
         Order order = orderMapper.toOrder(orderCreateDto);
         List<OrderItem> orderItems = orderCreateDto.getOrderItems().stream()
                 .map(itemDto -> {
+                    Stock stock = stockRepo.getStockById(itemDto.getStockId());
+                    if (stock.getQuantity() < itemDto.getQuantity()) {
+                        throw new InsufficientStockException("Insufficient stock for item: " + stock.getId());
+                    }
+                    int orderedQuantity = itemDto.getQuantity();
+                    int currentStockQuantity = stock.getQuantity();
+                    int newStockQuantity = currentStockQuantity - orderedQuantity;
+                    stock.setQuantity(newStockQuantity);
+                    stockRepo.updateStock(stock);
+
                     OrderItem orderItem = orderItemMapper.toOrderItem(itemDto);
                     orderItem.setOrder(order); // Ensure order is set correctly
                     return orderItem;
