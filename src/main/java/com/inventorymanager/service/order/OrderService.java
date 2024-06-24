@@ -1,6 +1,7 @@
 package com.inventorymanager.service.order;
 
 import com.inventorymanager.domain.exception.InsufficientStockException;
+import com.inventorymanager.domain.exception.ResourceNotFoundException;
 import com.inventorymanager.domain.order.IOrderItemRepo;
 import com.inventorymanager.domain.order.IOrderRepo;
 import com.inventorymanager.domain.order.Order;
@@ -68,8 +69,11 @@ public class OrderService implements IOrdeService{
     }
 
     @Override
-    public OrderReadDto updateOrder(UUID id, OrderUpdateDto newOrder) {
-        return null;
+    public OrderReadDto updateOrder(UUID id, OrderUpdateDto orderUpdateDto) {
+        Order order = orderRepo.getOrderById(id);
+        orderMapper.updateOrderFromDto(orderUpdateDto, order);
+        Order orderUpdated = orderRepo.updateOrder(order);
+        return orderMapper.ReadOrder(orderUpdated);
     }
 
     @Override

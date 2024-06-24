@@ -5,6 +5,8 @@ import com.inventorymanager.domain.order.Order;
 import com.inventorymanager.service.order.Dtos.OrderCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderReadDto;
 import com.inventorymanager.service.order.IOrdeService;
+import com.inventorymanager.service.order.Dtos.OrderReadDto;
+import com.inventorymanager.service.order.Dtos.OrderUpdateDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +39,18 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderReadDto createOrder(@RequestBody @Valid OrderCreateDto orderCreateDto) {
-//        OrderReadDto orderCreated = orderService.createOrder(orderCreateDto);
-//        SuccessResponseEntity<OrderReadDto> response = new SuccessResponseEntity<>();
-//        response.setData(new ArrayList<>(List.of(orderCreated)));
-//        return ResponseEntity.ok(response);
-        return orderService.createOrder(orderCreateDto);
+    public ResponseEntity<SuccessResponseEntity<OrderReadDto>> createOrder(@RequestBody @Valid OrderCreateDto orderCreateDto) {
+        OrderReadDto orderCreated = orderService.createOrder(orderCreateDto);
+        SuccessResponseEntity<OrderReadDto> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(orderCreated)));
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<SuccessResponseEntity<OrderReadDto>> updateOrder(@PathVariable UUID id, @RequestBody OrderUpdateDto orderUpdateDto) {
+        OrderReadDto orderUpdated = orderService.updateOrder(id, orderUpdateDto);
+        SuccessResponseEntity<OrderReadDto> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(orderUpdated)));
+        return ResponseEntity.ok(response);
     }
 }

@@ -31,6 +31,9 @@ public class Order {
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     private OrderStatus status = OrderStatus.PROCESSING;
 
+//    @Column(columnDefinition = "TIMESTAMP", nullable = false)
+//    private LocalDateTime deliverDate;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 }
