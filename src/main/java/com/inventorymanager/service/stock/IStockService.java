@@ -13,4 +13,8 @@ public interface IStockService {
     public StockReadDto createStock(StockCreateDto stockCreateDto);
     public StockReadDto updateStock(UUID id, StockUpdateDto newStock);
     public void deleteStock(UUID id);
+
+    public List<StockReadDto> getStocksBySupplier(UUID supplierId);
+
+    public List<StockReadDto> getStocksByProduct(String productId);
 }

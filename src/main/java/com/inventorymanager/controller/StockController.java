@@ -36,6 +36,22 @@ public class StockController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("supplier/{supplierId}")
+    public ResponseEntity<SuccessResponseEntity<StockReadDto>> getStocksBySupplier(@PathVariable UUID supplierId) {
+        List<StockReadDto> stocks = stockService.getStocksBySupplier(supplierId);
+        SuccessResponseEntity<StockReadDto> response = new SuccessResponseEntity<>();
+        response.setData(stocks);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("product/{productId}")
+    public ResponseEntity<SuccessResponseEntity<StockReadDto>> getStocksByProduct(@PathVariable String productId) {
+        List<StockReadDto> stocks = stockService.getStocksByProduct(productId);
+        SuccessResponseEntity<StockReadDto> response = new SuccessResponseEntity<>();
+        response.setData(stocks);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping
     public ResponseEntity<SuccessResponseEntity<StockReadDto>> createStock(@RequestBody @Valid StockCreateDto stockCreateDto) {
         StockReadDto stockCreated = stockService.createStock(stockCreateDto);

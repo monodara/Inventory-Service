@@ -50,4 +50,14 @@ public class StockService implements IStockService {
     public void deleteStock(UUID id) {
         stockRepo.deleteStock(id);
     }
+
+    @Override
+    public List<StockReadDto> getStocksBySupplier(UUID supplierId) {
+        return stockRepo.getStocksBySupplier(supplierId).stream().map(stockMapper::readStock).toList();
+    }
+
+    @Override
+    public List<StockReadDto> getStocksByProduct(String productId) {
+        return stockRepo.getStocksByProduct(productId).stream().map(stockMapper::readStock).toList();
+    }
 }
