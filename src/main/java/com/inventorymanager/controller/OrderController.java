@@ -53,4 +53,18 @@ public class OrderController {
         response.setData(new ArrayList<>(List.of(orderUpdated)));
         return ResponseEntity.ok(response);
     }
+    @PatchMapping("/cancel/{id}")
+    public ResponseEntity<SuccessResponseEntity<Boolean>> cancelOrder(@PathVariable UUID id) {
+        orderService.cancelOrder(id);
+        SuccessResponseEntity<Boolean> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(true)));
+        return ResponseEntity.ok(response);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponseEntity<Boolean>> deleteOrder(@PathVariable UUID id) {
+        orderService.deleteOrder(id);
+        SuccessResponseEntity<Boolean> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(true)));
+        return ResponseEntity.ok(response);
+    }
 }
