@@ -15,7 +15,8 @@ public interface OrderItemMapper {
     @Mapping(target = "stock", source = "stockId")
     OrderItem toOrderItem(OrderItemCreateDto orderItemCreateDto);
 
-    @Mapping(target = "stockId", source = "stock.id")
+//    @Mapping(target = "stockId", source = "stock.id")
+    @Mapping(target = "stock", source = "stock")
     OrderItemReadDto toOrderItemReadDto(OrderItem orderItem);
 }
 
