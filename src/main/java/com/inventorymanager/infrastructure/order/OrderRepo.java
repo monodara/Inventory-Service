@@ -3,8 +3,10 @@ package com.inventorymanager.infrastructure.order;
 import com.inventorymanager.domain.exception.ResourceNotFoundException;
 import com.inventorymanager.domain.order.IOrderRepo;
 import com.inventorymanager.domain.order.Order;
+import com.inventorymanager.domain.order.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,8 @@ import java.util.UUID;
 public class OrderRepo implements IOrderRepo {
     @Autowired
     private IOrderJpaRepo orderJpaRepo;
+    @Autowired
+    private IOrderItemJpaRepo orderItemJpaRepo;
     @Override
     public Order getOrderById(UUID id) {
         return orderJpaRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
@@ -25,6 +29,9 @@ public class OrderRepo implements IOrderRepo {
 
     @Override
     public Order createOrder(Order order) {
+//        for(OrderItem orderItem: order.getOrderItems()){
+//            orderItemJpaRepo.save(orderItem);
+//        }
         return orderJpaRepo.save(order);
     }
 

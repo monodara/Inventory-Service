@@ -37,7 +37,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody @Valid OrderCreateDto orderCreateDto) {
+    public OrderReadDto createOrder(@RequestBody @Valid OrderCreateDto orderCreateDto) {
 //        OrderReadDto orderCreated = orderService.createOrder(orderCreateDto);
 //        SuccessResponseEntity<OrderReadDto> response = new SuccessResponseEntity<>();
 //        response.setData(new ArrayList<>(List.of(orderCreated)));

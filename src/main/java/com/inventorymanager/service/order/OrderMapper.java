@@ -8,13 +8,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD, uses = {OrderItemMapper.class})
 public interface OrderMapper {
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "orderItems", source = "orderCreateDto.orderItems")
+    @Mapping(target = "orderItems", source = "orderItems")
     Order toOrder(OrderCreateDto orderCreateDto);
 
     @Mapping(target = "orderItems", source = "orderItems")

@@ -1,5 +1,6 @@
 package com.inventorymanager.domain.order;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.inventorymanager.domain.stock.Stock;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -8,14 +8,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD, uses = OrderItemMapperHelper.class)
 public interface OrderItemMapper {
-    OrderItemMapper INSTANCE = Mappers.getMapper(OrderItemMapper.class);
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "order", ignore = true)
+    @Mapping(target = "stock", source = "stockId")
     OrderItem toOrderItem(OrderItemCreateDto orderItemCreateDto);
 
     @Mapping(target = "stockId", source = "stock.id")
-    OrderItemReadDto readOrderItem(OrderItem orderItem);
+    OrderItemReadDto toOrderItemReadDto(OrderItem orderItem);
 }
 
