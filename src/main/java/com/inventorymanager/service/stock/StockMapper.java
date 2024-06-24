@@ -26,5 +26,6 @@ public interface StockMapper {
     @Mapping(target = "supplier", source = "supplier")
     StockReadDto readStock(Stock stock);
 
+    @Mapping(target = "supplier", source = "supplierId")
     void updateStockFromDto(StockUpdateDto updateDto, @MappingTarget Stock stock);
 }
