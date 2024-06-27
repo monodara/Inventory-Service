@@ -3,6 +3,7 @@ package com.inventorymanager.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,17 +15,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
-    private AuthApiKeyFilter authApiKeyFilter;
+    private SuperAdminRoleFilter superAdminRoleFilter;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
                         req -> req
-                                .requestMatchers("/suppliers/**").hasAuthority("ROLE_SUPERADMIN")
-                                .anyRequest()
-                                .permitAll()
+                                // super admin can NOT update supplier's info
+                                .requestMatchers(HttpMethod.PATCH, "/suppliers/**").denyAll()
+                                // super admin can ONLY list stocks and orders
+                                .requestMatchers(HttpMethod.GET, "/stocks/**", "/orders/**").hasRole("SUPERADMIN")
+                                .requestMatchers("/suppliers/**").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(authApiKeyFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(superAdminRoleFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

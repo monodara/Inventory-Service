@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
-public class AuthApiKeyFilter extends OncePerRequestFilter {
+public class SuperAdminRoleFilter extends OncePerRequestFilter {
     @Value("${SUPERADMIN_SECRET_KEY}")
     private String superAdminKey;
     @Override
