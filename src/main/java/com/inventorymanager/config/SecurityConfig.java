@@ -1,5 +1,6 @@
 package com.inventorymanager.config;
 
+import com.inventorymanager.config.filter.SuperAdminRoleFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,11 @@ public class SecurityConfig {
                                 // super admin can ONLY list stocks and orders
                                 .requestMatchers(HttpMethod.GET, "/stocks/**", "/orders/**").hasRole("SUPERADMIN")
                                 .requestMatchers("/suppliers/**").permitAll()
+                                // A "order placer" can create/delte/cancel orders
+                                // For later integration with ecommerce fullstack system
+                                .requestMatchers(HttpMethod.POST, "/orders/**").hasRole("ORDERPLACER")
+                                .requestMatchers(HttpMethod.DELETE, "/orders/**").hasRole("ORDERPLACER")
+                                .requestMatchers(HttpMethod.PATCH, "/orders/cancel").hasRole("ORDERPLACER")
                                 .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

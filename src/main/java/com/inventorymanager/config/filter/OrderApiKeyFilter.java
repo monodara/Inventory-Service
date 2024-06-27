@@ -1,4 +1,4 @@
-package com.inventorymanager.config;
+package com.inventorymanager.config.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,21 +17,21 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
-public class SuperAdminRoleFilter extends OncePerRequestFilter {
-    @Value("${SUPERADMIN_SECRET_KEY}")
-    private String superAdminKey;
+public class OrderApiKeyFilter extends OncePerRequestFilter {
+    @Value("${ORDER_API_KEY}")
+    private String orderApiKey;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String keyHeader = request.getHeader("ADMIN_KEY");
-        if(keyHeader == null || !keyHeader.equals(superAdminKey)){
+        String keyHeader = request.getHeader("ORDER_API_KEY");
+        if(keyHeader == null || !keyHeader.equals(orderApiKey)){
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.getWriter().write("Invalid key");
             return;
         }
         // Create a list of authorities
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_SUPERADMIN");
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ORDERPLACER");
         // Create an authentication token
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("superadmin", null, Collections.singletonList(authority));
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("orderplacer", null, Collections.singletonList(authority));
         // Set the authentication in the context
         SecurityContextHolder.getContext().setAuthentication(auth);
         filterChain.doFilter(request, response);
