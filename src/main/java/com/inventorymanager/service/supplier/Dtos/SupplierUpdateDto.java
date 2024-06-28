@@ -22,4 +22,11 @@ public class SupplierUpdateDto {
     private String email;
     @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number should be 10 to 15 digits")
     private String phone;
+
+    @NotNull
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+            message = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit"
+    )
+    private String password;
 }
