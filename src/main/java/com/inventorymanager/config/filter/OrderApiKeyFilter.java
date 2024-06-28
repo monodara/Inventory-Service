@@ -24,16 +24,13 @@ public class OrderApiKeyFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String keyHeader = request.getHeader("ORDER_API_KEY");
         if(keyHeader == null || !keyHeader.equals(orderApiKey)){
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.getWriter().write("Invalid key");
+            filterChain.doFilter(request,response);
             return;
         }
-        // Create a list of authorities
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ORDERPLACER");
-        // Create an authentication token
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("orderplacer", null, Collections.singletonList(authority));
-        // Set the authentication in the context
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        OrderPlacerAuthToken auth = new OrderPlacerAuthToken();
+        var newContext = SecurityContextHolder.createEmptyContext();
+        newContext.setAuthentication(auth);
+        SecurityContextHolder.setContext(newContext);
         filterChain.doFilter(request, response);
     }
 }

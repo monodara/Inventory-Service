@@ -24,4 +24,7 @@ public class SupplierCreateDto {
     private String email;
     @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number should be 10 to 15 digits")
     private String phone;
+
+    @NotNull
+    private  String password;
 }

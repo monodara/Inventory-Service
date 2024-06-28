@@ -14,5 +14,5 @@ public interface IStockJpaRepo extends JpaRepository<Stock, UUID> {
     @Query("SELECT s FROM Stock s WHERE s.supplier.id = :supplierId")
     List<Stock> findStocksBySupplierId(@Param("supplierId") UUID supplierId);
     @Query("SELECT s FROM Stock s WHERE s.productId = :productId")
-    List<Stock> findStocksByProductId(String productId);
+    List<Stock> findStocksByProductId(@Param("productId")String productId);
 }

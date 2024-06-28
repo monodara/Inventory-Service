@@ -20,20 +20,21 @@ import java.util.Collections;
 public class SuperAdminRoleFilter extends OncePerRequestFilter {
     @Value("${SUPERADMIN_SECRET_KEY}")
     private String superAdminKey;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String keyHeader = request.getHeader("ADMIN_KEY");
+        System.out.println("Received ADMIN_KEY: " + keyHeader);
         if(keyHeader == null || !keyHeader.equals(superAdminKey)){
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.getWriter().write("Invalid key");
+//            response.setStatus(HttpStatus.FORBIDDEN.value());
+//            response.getWriter().write("Invalid key");
+            filterChain.doFilter(request, response);
             return;
         }
-        // Create a list of authorities
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_SUPERADMIN");
-        // Create an authentication token
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("superadmin", null, Collections.singletonList(authority));
-        // Set the authentication in the context
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        SuperAdminAuthToken auth = new SuperAdminAuthToken();
+        var newContext = SecurityContextHolder.createEmptyContext();
+        newContext.setAuthentication(auth);
+        SecurityContextHolder.setContext(newContext);
         filterChain.doFilter(request, response);
     }
 }

@@ -2,6 +2,8 @@ package com.inventorymanager.controller;
 
 import com.inventorymanager.controller.shared.SuccessResponseEntity;
 import com.inventorymanager.domain.supplier.Supplier;
+import com.inventorymanager.domain.supplier.SupplierCredential;
+import com.inventorymanager.service.authentication.IAuthService;
 import com.inventorymanager.service.supplier.Dtos.SupplierCreateDto;
 import com.inventorymanager.service.supplier.Dtos.SupplierReadDto;
 import com.inventorymanager.service.supplier.Dtos.SupplierUpdateDto;
@@ -20,6 +22,8 @@ import java.util.UUID;
 public class SupplierController {
     @Autowired
     private ISupplierService supplierService;
+    @Autowired
+    private IAuthService authService;
 
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> getSupplierById(@PathVariable UUID id) {
@@ -37,9 +41,16 @@ public class SupplierController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<String> login(@RequestBody SupplierCredential supplierCredential) {
+        String token = authService.login(supplierCredential);
+        return ResponseEntity.ok(token);
+    }
+
     @PostMapping
     public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> createSupplier(@RequestBody @Valid SupplierCreateDto supplierCreateDto) {
-        SupplierReadDto supplierCreated = supplierService.createSupplier(supplierCreateDto);
+//        SupplierReadDto supplierCreated = supplierService.createSupplier(supplierCreateDto);
+        SupplierReadDto supplierCreated = authService.register(supplierCreateDto);
         SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
         response.setData(new ArrayList<>(List.of(supplierCreated)));
         return ResponseEntity.ok(response);
