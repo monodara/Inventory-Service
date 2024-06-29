@@ -5,6 +5,13 @@ import com.inventorymanager.domain.exception.ResourceNotFoundException;
 import com.inventorymanager.domain.order.*;
 import com.inventorymanager.domain.stock.IStockRepo;
 import com.inventorymanager.domain.stock.Stock;
+import com.inventorymanager.domain.supplier.ISupplierRepo;
+import com.inventorymanager.domain.supplier.Supplier;
+import com.inventorymanager.infrastructure.email.EmailService;
+import com.inventorymanager.infrastructure.supplier.ISupplierJpaRepo;
+import com.inventorymanager.service.notification.Constants;
+import com.inventorymanager.service.notification.IEmaiService;
+import com.inventorymanager.service.notification.ILowStockAlertService;
 import com.inventorymanager.service.order.Dtos.OrderCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderItemCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderReadDto;
@@ -21,13 +28,18 @@ import java.util.stream.Collectors;
 public class OrderService implements IOrdeService{
     @Autowired
     private IOrderRepo orderRepo;
-
     @Autowired
     private IStockRepo stockRepo;
+    @Autowired
+    private ISupplierRepo supplierRepo;
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
     private OrderItemMapper orderItemMapper;
+    @Autowired
+    private ILowStockAlertService lowStockAlertService;
+
+
 
     @Override
     public OrderReadDto getOrderById(UUID id) {
@@ -54,7 +66,11 @@ public class OrderService implements IOrdeService{
                     int currentStockQuantity = stock.getQuantity();
                     int newStockQuantity = currentStockQuantity - orderedQuantity;
                     stock.setQuantity(newStockQuantity);
-                    stockRepo.updateStock(stock);
+                    stock = stockRepo.updateStock(stock);
+                    if(newStockQuantity < Constants.STOCK_THRESHOLD){//Send stock level warning
+                        Supplier supplier = supplierRepo.getSupplierById(stock.getSupplier().getId());
+                        lowStockAlertService.sendLowStockAlert(supplier.getEmail(), stock);
+                    }
 
                     OrderItem orderItem = orderItemMapper.toOrderItem(itemDto);
                     orderItem.setOrder(order); // Ensure order is set correctly
