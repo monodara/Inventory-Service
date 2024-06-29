@@ -13,4 +13,5 @@ import java.time.LocalDateTime;
 @Setter
 public class OrderUpdateDto {
     private OrderStatus status;
+    private LocalDateTime deliverDate;
 }

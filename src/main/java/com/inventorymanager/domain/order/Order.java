@@ -28,11 +28,14 @@ public class Order {
     private LocalDateTime orderDate;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
+    @Column(name = "status", columnDefinition = "VARCHAR(20)", nullable = false)
     private OrderStatus status = OrderStatus.PROCESSING;
 
-//    @Column(columnDefinition = "TIMESTAMP", nullable = false)
-//    private LocalDateTime deliverDate;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime deliverDate;
+
+    @Column(columnDefinition = "VARCHAR(50)")
+    private String clientEmail;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;

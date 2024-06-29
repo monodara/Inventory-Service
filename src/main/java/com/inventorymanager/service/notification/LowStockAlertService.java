@@ -11,7 +11,7 @@ public class LowStockAlertService implements ILowStockAlertService{
     private final String subject = "!Alert: Low Stock Level!";
     @Override
     public void sendLowStockAlert(String receiver, Stock stock) {
-        String htmlContent = "<h1>This is a reminder from PeacoPlaza</h1>" +
+        String htmlContent = "<h3>This is a reminder from PeacoPlaza</h3>" +
                 "<p>The stock level is below " + Constants.STOCK_THRESHOLD + ". Below is the stock information:</p>" +
                 "<table border='1' style='border-collapse: collapse; width: 50%;'>" +
                 "<tr>" +

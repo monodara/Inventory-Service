@@ -12,7 +12,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD, uses = {OrderItemMapper.class})
 public interface OrderMapper {
-    OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)

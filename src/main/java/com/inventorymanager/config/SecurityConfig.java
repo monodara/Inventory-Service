@@ -48,9 +48,13 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/suppliers/**").hasAnyAuthority("SUPERADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/stocks/**").hasAnyAuthority("SUPERADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").hasAnyAuthority("SUPERADMIN")
+                                // "Order placer" can create/delete/cancle order
+                                // For later integration with fullstack project
+                                .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasAnyAuthority("ORDERPLACER")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasAnyAuthority("ORDERPLACER")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/cancel/**").hasAnyAuthority("ORDERPLACER")
 
                                  // Supplier can retrieve
-                                .requestMatchers(HttpMethod.GET, "/api/v1/suppliers/{id}").hasAnyAuthority("SUPPLIER")
                                 .requestMatchers(HttpMethod.PATCH, "/api/v1/suppliers/{id}").hasAnyAuthority("SUPPLIER")
                                 .requestMatchers(HttpMethod.POST, "/api/v1/stocks").hasAnyAuthority( "SUPPLIER")
                                 .requestMatchers(HttpMethod.PATCH, "/api/v1/stocks/**").hasAnyAuthority("SUPPLIER")
@@ -59,11 +63,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/**").hasAnyAuthority("SUPPLIER")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").hasAnyAuthority( "SUPPLIER")
 
-                                // "Order placer" can create/delete/cancle order
-                                // For later integration with fullstack project
-                                .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasAnyAuthority("ORDERPLACER")
-                                .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasAnyAuthority("ORDERPLACER")
-                                .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/cancel").hasAnyAuthority("ORDERPLACER")
 
                                 .anyRequest().permitAll()
                 )

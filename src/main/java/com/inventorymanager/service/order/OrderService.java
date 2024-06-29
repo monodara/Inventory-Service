@@ -12,6 +12,7 @@ import com.inventorymanager.infrastructure.supplier.ISupplierJpaRepo;
 import com.inventorymanager.service.notification.Constants;
 import com.inventorymanager.service.notification.IEmaiService;
 import com.inventorymanager.service.notification.ILowStockAlertService;
+import com.inventorymanager.service.notification.IOrderStatusNotiService;
 import com.inventorymanager.service.order.Dtos.OrderCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderItemCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderReadDto;
@@ -38,7 +39,8 @@ public class OrderService implements IOrdeService{
     private OrderItemMapper orderItemMapper;
     @Autowired
     private ILowStockAlertService lowStockAlertService;
-
+    @Autowired
+    private IOrderStatusNotiService orderStatusNotiService;
 
 
     @Override
@@ -71,7 +73,6 @@ public class OrderService implements IOrdeService{
                         Supplier supplier = supplierRepo.getSupplierById(stock.getSupplier().getId());
                         lowStockAlertService.sendLowStockAlert(supplier.getEmail(), stock);
                     }
-
                     OrderItem orderItem = orderItemMapper.toOrderItem(itemDto);
                     orderItem.setOrder(order); // Ensure order is set correctly
                     return orderItem;
@@ -86,6 +87,9 @@ public class OrderService implements IOrdeService{
         Order order = orderRepo.getOrderById(id);
         orderMapper.updateOrderFromDto(orderUpdateDto, order);
         Order orderUpdated = orderRepo.updateOrder(order);
+        if(orderUpdated.getStatus() == OrderStatus.SHIPPED){
+            orderStatusNotiService.sendShippedNotification(orderUpdated);
+        }
         return orderMapper.ReadOrder(orderUpdated);
     }
     public boolean cancelOrder(UUID id){
