@@ -1,9 +1,20 @@
 <configuration>
-    <!-- 定义一个日志文件 appender -->
-    <appender name="REQUEST_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- Appender for exception logs -->
+    <appender name="EXCEPTION_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/exception.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/exception.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender for request logs -->
+    <appender name="REQUEST_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/request.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志文件滚动策略 -->
             <fileNamePattern>logs/request.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
@@ -12,12 +23,24 @@
         </encoder>
     </appender>
 
-    <!-- 配置一个 logger -->
-    <logger name="RequestLogger" level="INFO" additivity="false">
-        <appender-ref ref="REQUEST_LOG"/>
+    <!-- Logger for exceptions -->
+    <logger name="com.inventorymanager.infrastructure.middleware.GlobalExceptionHandler" level="ERROR" additivity="false">
+        <appender-ref ref="EXCEPTION_FILE"/>
     </logger>
 
-    <!-- root logger 配置 -->
+    <!-- Logger for request logs -->
+    <logger name="com.inventorymanager.config.filter.LogFilter" level="INFO" additivity="false">
+        <appender-ref ref="REQUEST_FILE"/>
+    </logger>
+
+    <!-- Console appender for general logs -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root logger -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>

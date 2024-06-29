@@ -11,12 +11,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class LogFilter extends OncePerRequestFilter {
-    private static final Logger requestLogger = LoggerFactory.getLogger("RequestLogger");
+    private static final Logger logger = LoggerFactory.getLogger(LogFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        requestLogger.info("REQUEST METHOD: {} | REQUEST URI: {}", request.getMethod(), request.getRequestURI());
+        logger.info("REQUEST METHOD: {} | REQUEST URI: {}", request.getMethod(), request.getRequestURI());
         filterChain.doFilter(request, response);
     }
 }
