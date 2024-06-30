@@ -46,26 +46,16 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/reports/**").hasAnyAuthority("SUPERADMIN", "SUPPLIER")
                                 // suppliers info is open to everyone
                                 .requestMatchers(HttpMethod.GET, "/api/v1/suppliers/**").permitAll()
-                                // super admin can 1.create/delete supplier, 2.read supplier(s), 3.read order(s)/stock(s)
-                                .requestMatchers(HttpMethod.POST, "/api/v1/suppliers").hasAnyAuthority("SUPERADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/v1/suppliers/**").hasAnyAuthority("SUPERADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/v1/stocks/**").hasAnyAuthority("SUPERADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").hasAnyAuthority("SUPERADMIN")
+                                // super admin can create/update/delete supplier and stock
+                                .requestMatchers("/api/v1/suppliers/**","/api/v1/stocks/**").hasAnyAuthority("SUPERADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAnyAuthority("SUPERADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/orders").hasAnyAuthority("SUPERADMIN")
+
                                 // "Order placer" can create/delete/cancle order
                                 // For later integration with fullstack project
                                 .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasAnyAuthority("ORDERPLACER")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasAnyAuthority("ORDERPLACER")
                                 .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/cancel/**").hasAnyAuthority("ORDERPLACER")
-
-                                 // Supplier can retrieve
-                                .requestMatchers(HttpMethod.PATCH, "/api/v1/suppliers/{id}").hasAnyAuthority("SUPPLIER")
-                                .requestMatchers(HttpMethod.POST, "/api/v1/stocks").hasAnyAuthority( "SUPPLIER")
-                                .requestMatchers(HttpMethod.PATCH, "/api/v1/stocks/**").hasAnyAuthority("SUPPLIER")
-                                .requestMatchers(HttpMethod.DELETE, "/api/v1/stocks/**").hasAnyAuthority( "SUPPLIER")
-                                .requestMatchers(HttpMethod.GET, "/api/v1/stocks/**").hasAnyAuthority( "SUPPLIER")
-                                .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/**").hasAnyAuthority("SUPPLIER")
-                                .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").hasAnyAuthority( "SUPPLIER")
-
 
                                 .anyRequest().permitAll()
                 )

@@ -61,23 +61,10 @@ public class SupplierController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> updateSupplier(@PathVariable UUID id, @RequestBody SupplierUpdateDto supplierUpdateDto) throws AuthenticationException {
-        //Check if the supplier-tobe-updated is same as current logged-in supplier
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof Supplier)) {
-            throw new AuthenticationException("Please login first!");
-        } else {
-            Supplier supplierLogIn = (Supplier) authentication.getPrincipal();
-            UUID supplierToBeUpdatedId = getSupplierById(id).getBody().getData().get(0).getId();
-            if(!supplierLogIn.getId().equals(supplierToBeUpdatedId)){
-                throw new AuthenticationException("Please login first!");
-            }else{
-                SupplierReadDto supplierUpdated = supplierService.updateSupplier(id, supplierUpdateDto);
-                SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
-                response.setData(new ArrayList<>(List.of(supplierUpdated)));
-                return ResponseEntity.ok(response);
-            }
-        }
-
+        SupplierReadDto supplierUpdated = supplierService.updateSupplier(id, supplierUpdateDto);
+        SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
+        response.setData(new ArrayList<>(List.of(supplierUpdated)));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
