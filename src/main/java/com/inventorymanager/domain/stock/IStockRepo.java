@@ -17,4 +17,6 @@ public interface IStockRepo {
     public List<Stock> getStocksBySupplier(UUID supplierId);
 
     public List<Stock> getStocksByProduct(String productId);
+
+    public List<Stock> findLowStockItems(int threshold);
 }

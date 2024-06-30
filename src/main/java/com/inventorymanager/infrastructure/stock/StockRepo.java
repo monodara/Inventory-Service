@@ -47,4 +47,9 @@ public class StockRepo implements IStockRepo {
     public List<Stock> getStocksByProduct(String productId) {
         return stockJpaRepo.findStocksByProductId(productId);
     }
+
+    @Override
+    public List<Stock> findLowStockItems(int threshold){
+        return stockJpaRepo.findLowStockItems(threshold);
+    }
 }

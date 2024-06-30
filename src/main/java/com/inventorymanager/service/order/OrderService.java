@@ -1,23 +1,18 @@
 package com.inventorymanager.service.order;
 
 import com.inventorymanager.domain.exception.InsufficientStockException;
-import com.inventorymanager.domain.exception.ResourceNotFoundException;
 import com.inventorymanager.domain.order.*;
 import com.inventorymanager.domain.stock.IStockRepo;
 import com.inventorymanager.domain.stock.Stock;
 import com.inventorymanager.domain.supplier.ISupplierRepo;
 import com.inventorymanager.domain.supplier.Supplier;
-import com.inventorymanager.infrastructure.email.EmailService;
-import com.inventorymanager.infrastructure.supplier.ISupplierJpaRepo;
-import com.inventorymanager.service.notification.Constants;
-import com.inventorymanager.service.notification.IEmaiService;
 import com.inventorymanager.service.notification.ILowStockAlertService;
 import com.inventorymanager.service.notification.IOrderStatusNotiService;
 import com.inventorymanager.service.order.Dtos.OrderCreateDto;
-import com.inventorymanager.service.order.Dtos.OrderItemCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderReadDto;
 import com.inventorymanager.service.order.Dtos.OrderUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +36,9 @@ public class OrderService implements IOrdeService{
     private ILowStockAlertService lowStockAlertService;
     @Autowired
     private IOrderStatusNotiService orderStatusNotiService;
+
+    @Value("${stock.threshold}")
+    private int stockThreshold;
 
 
     @Override
@@ -69,9 +67,9 @@ public class OrderService implements IOrdeService{
                     int newStockQuantity = currentStockQuantity - orderedQuantity;
                     stock.setQuantity(newStockQuantity);
                     stock = stockRepo.updateStock(stock);
-                    if(newStockQuantity < Constants.STOCK_THRESHOLD){//Send stock level warning
+                    if(newStockQuantity < stockThreshold){//Send stock level warning
                         Supplier supplier = supplierRepo.getSupplierById(stock.getSupplier().getId());
-                        lowStockAlertService.sendLowStockAlert(supplier.getEmail(), stock);
+                        lowStockAlertService.sendLowStockAlert(supplier.getEmail(), List.of(stock));
                     }
                     OrderItem orderItem = orderItemMapper.toOrderItem(itemDto);
                     orderItem.setOrder(order); // Ensure order is set correctly
