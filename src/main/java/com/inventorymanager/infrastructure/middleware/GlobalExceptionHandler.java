@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,30 +25,70 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleNotFoundException(Exception ex){
+    public ResponseEntity<ErrorResponseEntity> handleNotFoundException(Exception ex){
         logger.error("ResourceNotFoundException: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        ErrorEntity errorEntity = ErrorEntity.builder()
+                .field("resource")
+                .message(ex.getMessage())
+                .build();
+        ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.builder()
+                .errors(List.of(errorEntity))
+                .build();
+        return new ResponseEntity<>(errorResponseEntity, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleBadRequestException(Exception ex){
+    public ResponseEntity<ErrorResponseEntity> handleBadRequestException(Exception ex){
         logger.error("BadRequestException: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        ErrorEntity errorEntity = ErrorEntity.builder()
+                .field("resource")
+                .message(ex.getMessage())
+                .build();
+        ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.builder()
+                .errors(List.of(errorEntity))
+                .build();
+        return new ResponseEntity<>(errorResponseEntity, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InsufficientStockException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleInsufficientStockException(Exception ex){
+    public ResponseEntity<ErrorResponseEntity> handleInsufficientStockException(Exception ex){
         logger.error("InsufficientStockException: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        ErrorEntity errorEntity = ErrorEntity.builder()
+                .field("resource")
+                .message(ex.getMessage())
+                .build();
+        ErrorResponseEntity errorResponseEntity = ErrorResponseEntity.builder()
+                .errors(List.of(errorEntity))
+                .build();
+        return new ResponseEntity<>(errorResponseEntity, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> handleAllException(Exception ex){
+    public ResponseEntity<ErrorResponseEntity> handleAllException(Exception ex){
         logger.error("Exception: {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        List<ErrorEntity> errors = new ArrayList<>();
+
+        if (ex instanceof BindException) {
+            for (FieldError fieldError : ((BindException) ex).getBindingResult().getFieldErrors()) {
+                ErrorEntity errorEntity = new ErrorEntity();
+                errorEntity.setField(fieldError.getField());
+                errorEntity.setMessage(fieldError.getField() + " " + fieldError.getDefaultMessage());
+                errors.add(errorEntity);
+            }
+        } else {
+            ErrorEntity errorEntity = new ErrorEntity();
+            errorEntity.setField("Exception");
+            errorEntity.setMessage(ex.getMessage());
+            errors.add(errorEntity);
+        }
+
+        ErrorResponseEntity errorResponseEntity = new ErrorResponseEntity();
+        errorResponseEntity.setErrors(errors);
+
+        return new ResponseEntity<>(errorResponseEntity, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -55,10 +96,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseEntity> handleValidationException(MethodArgumentNotValidException ex){
         List<ErrorEntity> errors = new ArrayList<>();
         for(FieldError fieldError: ex.getBindingResult().getFieldErrors()){
-            /*ErrorEntity errorEntity = ErrorEntity
-                        .builder()
-                        .field(fieldError.getField()).message(fieldError.getField() + " " + fieldError.getDefaultMessage())
-                        .build();*/
             ErrorEntity errorEntity = new ErrorEntity();
             errorEntity.setField(fieldError.getField());
             errorEntity.setMessage(fieldError.getField() + " " + fieldError.getDefaultMessage());

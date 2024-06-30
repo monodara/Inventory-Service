@@ -43,19 +43,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         req -> req
                                 .requestMatchers("/api/v1/suppliers/login").permitAll()
-                                .requestMatchers("/api/v1/reports/**").hasAnyAuthority("SUPERADMIN", "SUPPLIER")
-                                // suppliers info is open to everyone
-                                .requestMatchers(HttpMethod.GET, "/api/v1/suppliers/**").permitAll()
-                                // super admin can create/update/delete supplier and stock
-                                .requestMatchers("/api/v1/suppliers/**","/api/v1/stocks/**").hasAnyAuthority("SUPERADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAnyAuthority("SUPERADMIN")
-                                .requestMatchers(HttpMethod.PATCH, "/api/v1/orders").hasAnyAuthority("SUPERADMIN")
 
                                 // "Order placer" can create/delete/cancle order
                                 // For later integration with fullstack project
                                 .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasAnyAuthority("ORDERPLACER")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasAnyAuthority("ORDERPLACER")
                                 .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/cancel/**").hasAnyAuthority("ORDERPLACER")
+
+                                .requestMatchers("/api/v1/reports/**").hasAnyAuthority("SUPERADMIN", "SUPPLIER")
+                                // super admin can create/update/delete supplier and stock
+                                .requestMatchers("/api/v1/suppliers/**","/api/v1/stocks/**").hasAnyAuthority("SUPERADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").hasAnyAuthority("SUPERADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/**").hasAnyAuthority("SUPERADMIN")
 
                                 .anyRequest().permitAll()
                 )
