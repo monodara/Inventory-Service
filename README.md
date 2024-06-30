@@ -76,7 +76,7 @@ The development followed CLEAN architecture to minimarize dependency.
 
 *Scheduler* : Houses scheduled tasks, e.g., send daily email of low-level stocks.
 ### API Design
-You can find details of endpoint design [here](https://github.com//monodara/java_inventory_service/endpoints)
+You can find details of endpoint design [here](endpoints/endpoint.md)
 There are 4 main entries:
 - `api/v1/suppliers`
 - `api/v1/stocks`
@@ -151,20 +151,20 @@ API Key (for super admin and order placer) and Jwt (for suppliers) based authent
 ### Logger
 The system leverages `logback` to record requests and exceptions and store the log file in a folder called `logs`.
 
-<img width="880" alt="screenshot of log file" src="https://github.com/monodara/java_inventory_service/assets/screenshot_logger">
+<img width="880" alt="screenshot of log file" src="assets/screenshot_logger.png">
 
 ### Email Notification
 The email notification service is designed to notify users if a stock level is below the predefined threshold on order creating and on a daily basis which implemented by scheduler.
 
-<img width="880" alt="screenshot of log file" src="https://github.com/monodara/java_inventory_service/assets/screenshot_email_stocklevel">
+<img width="880" alt="screenshot of low stock" src="assets/screenshot_email_stocklevel.jpg">
 
 The client who has made an order of which status is changed to SHIPPED would get email notification as well.
 
-<img width="880" alt="screenshot of log file" src="https://github.com/monodara/java_inventory_service/assets/screenshot_email_shiporder">
+<img width="880" alt="screenshot of order shipped" src="assets/screenshot_email_shiporder.jpg">
 
 ### Report
 The application supports csv format reports so that users can review stock levels and sales trends during a certain period.
 
-<img width="880" alt="screenshot of log file" src="https://github.com/monodara/java_inventory_service/assets/screenshot_report_stocklevel">
+<img width="880" alt="screenshot of stock level report" src="assets/screenshot_report_stocklevel.png">
 
-<img width="880" alt="screenshot of log file" src="https://github.com/monodara/java_inventory_service/assets/screenshot_report_sales">
+<img width="880" alt="screenshot of sales report" src="assets/screenshot_report_sales.png">
