@@ -11,8 +11,11 @@ import com.inventorymanager.service.supplier.ISupplierService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -57,11 +60,24 @@ public class SupplierController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> updateSupplier(@PathVariable UUID id, @RequestBody SupplierUpdateDto supplierUpdateDto) {
-        SupplierReadDto supplierUpdated = supplierService.updateSupplier(id, supplierUpdateDto);
-        SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
-        response.setData(new ArrayList<>(List.of(supplierUpdated)));
-        return ResponseEntity.ok(response);
+    public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> updateSupplier(@PathVariable UUID id, @RequestBody SupplierUpdateDto supplierUpdateDto) throws AuthenticationException {
+        //Check if the supplier-tobe-updated is same as current logged-in supplier
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof Supplier)) {
+            throw new AuthenticationException("Please login first!");
+        } else {
+            Supplier supplierLogIn = (Supplier) authentication.getPrincipal();
+            UUID supplierToBeUpdatedId = getSupplierById(id).getBody().getData().get(0).getId();
+            if(!supplierLogIn.getId().equals(supplierToBeUpdatedId)){
+                throw new AuthenticationException("Please login first!");
+            }else{
+                SupplierReadDto supplierUpdated = supplierService.updateSupplier(id, supplierUpdateDto);
+                SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
+                response.setData(new ArrayList<>(List.of(supplierUpdated)));
+                return ResponseEntity.ok(response);
+            }
+        }
+
     }
 
     @DeleteMapping("/{id}")
