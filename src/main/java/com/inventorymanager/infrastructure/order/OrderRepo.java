@@ -35,7 +35,6 @@ public class OrderRepo implements IOrderRepo {
 
     @Override
     public Order updateOrder(Order newOrder) {
-        System.out.println(newOrder.getStatus());
         return orderJpaRepo.save(newOrder);
     }
 

@@ -24,10 +24,7 @@ public class SuperAdminRoleFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String keyHeader = request.getHeader("ADMIN_KEY");
-        System.out.println("Received ADMIN_KEY: " + keyHeader);
         if(keyHeader == null || !keyHeader.equals(superAdminKey)){
-//            response.setStatus(HttpStatus.FORBIDDEN.value());
-//            response.getWriter().write("Invalid key");
             filterChain.doFilter(request, response);
             return;
         }

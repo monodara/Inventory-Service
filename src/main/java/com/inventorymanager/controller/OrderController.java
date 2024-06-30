@@ -7,6 +7,7 @@ import com.inventorymanager.service.order.IOrderService;
 import com.inventorymanager.service.order.Dtos.OrderUpdateDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,9 @@ public class OrderController {
         OrderReadDto orderCreated = orderService.createOrder(orderCreateDto);
         SuccessResponseEntity<OrderReadDto> response = new SuccessResponseEntity<>();
         response.setData(new ArrayList<>(List.of(orderCreated)));
-        return ResponseEntity.ok(response);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @PatchMapping("/{id}")

@@ -10,6 +10,7 @@ import com.inventorymanager.service.supplier.Dtos.SupplierUpdateDto;
 import com.inventorymanager.service.supplier.ISupplierService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,11 +53,12 @@ public class SupplierController {
 
     @PostMapping
     public ResponseEntity<SuccessResponseEntity<SupplierReadDto>> createSupplier(@RequestBody @Valid SupplierCreateDto supplierCreateDto) {
-//        SupplierReadDto supplierCreated = supplierService.createSupplier(supplierCreateDto);
         SupplierReadDto supplierCreated = authService.register(supplierCreateDto);
         SuccessResponseEntity<SupplierReadDto> response = new SuccessResponseEntity<>();
         response.setData(new ArrayList<>(List.of(supplierCreated)));
-        return ResponseEntity.ok(response);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @PatchMapping("/{id}")

@@ -7,6 +7,7 @@ import com.inventorymanager.service.stock.Dtos.StockReadDto;
 import com.inventorymanager.service.stock.Dtos.StockUpdateDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +59,9 @@ public class StockController {
         StockReadDto stockCreated = stockService.createStock(stockCreateDto);
         SuccessResponseEntity<StockReadDto> response = new SuccessResponseEntity<>();
         response.setData(new ArrayList<>(List.of(stockCreated)));
-        return ResponseEntity.ok(response);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @PatchMapping("/{id}")
