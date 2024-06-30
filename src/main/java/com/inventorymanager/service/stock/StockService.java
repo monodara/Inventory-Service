@@ -2,16 +2,19 @@ package com.inventorymanager.service.stock;
 
 import com.inventorymanager.domain.stock.IStockRepo;
 import com.inventorymanager.domain.stock.Stock;
+import com.inventorymanager.domain.supplier.ISupplierRepo;
 import com.inventorymanager.domain.supplier.Supplier;
 import com.inventorymanager.service.stock.Dtos.StockCreateDto;
 import com.inventorymanager.service.stock.Dtos.StockReadDto;
 import com.inventorymanager.service.stock.Dtos.StockUpdateDto;
 import com.inventorymanager.service.stock.IStockService;
+import com.inventorymanager.service.supplier.ISupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 @Service
 public class StockService implements IStockService {
@@ -19,6 +22,22 @@ public class StockService implements IStockService {
     private IStockRepo stockRepo;
     @Autowired
     private StockMapper stockMapper;
+
+    @Autowired
+    private ISupplierRepo supplierRepo;
+
+    public void createDummyStocks() {
+        List<Supplier> suppliers = supplierRepo.getAllSuppliers();
+        IntStream.range(0, 20).forEach(i -> {
+            Stock stock = new Stock();
+            stock.setId(UUID.randomUUID());
+            stock.setQuantity((int) (Math.random() * 100));
+            stock.setProductId("Product " + i);
+            stock.setInputPrice(Math.random() * 100);
+            stock.setSupplier(suppliers.get(i % suppliers.size()));
+            stockRepo.createStock(stock);
+        });
+    }
     @Override
     public StockReadDto getStockById(UUID id) {
         Stock stock = stockRepo.getStockById(id);

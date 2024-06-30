@@ -123,7 +123,7 @@ public class ReportController {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    private class DailySalesReportDto {
+    public class DailySalesReportDto {
         private LocalDate date;
         private double totalSales;
         private double totalProfit;

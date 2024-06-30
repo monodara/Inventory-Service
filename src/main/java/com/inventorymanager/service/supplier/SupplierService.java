@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 @Service
 public class SupplierService implements ISupplierService{
@@ -18,6 +19,18 @@ public class SupplierService implements ISupplierService{
     @Autowired
     private SupplierMapper supplierMapper;
 
+    public void createDummySuppliers() {
+        IntStream.range(0, 20).forEach(i -> {
+            Supplier supplier = new Supplier();
+            supplier.setId(UUID.randomUUID());
+            supplier.setName("Supplier " + i);
+            supplier.setAddress("Address " + i);
+            supplier.setEmail("supplier" + i + "@example.com");
+            supplier.setPhone("123456789" + i);
+            supplier.setPassword("password" + i);
+            supplierRepo.createSupplier(supplier);
+        });
+    }
     @Override
     public SupplierReadDto getSupplierById(UUID id) {
         Supplier supplier = supplierRepo.getSupplierById(id);

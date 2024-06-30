@@ -16,12 +16,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class OrderService implements IOrderService {
@@ -43,6 +47,37 @@ public class OrderService implements IOrderService {
     @Value("${stock.threshold}")
     private int stockThreshold;
 
+    public void createDummyOrders() {
+        List<Stock> stocks = stockRepo.getAllStocks();
+
+        IntStream.range(0, 50).forEach(i -> {
+            Order order = new Order();
+            order.setId(UUID.randomUUID());
+            order.setOrderDate(LocalDateTime.now().minusDays((int) (Math.random() * 10)));
+            order.setStatus(OrderStatus.PROCESSING);
+            order.setDeliverDate(LocalDateTime.now().plusDays((int) (Math.random() * 30)));
+            order.setClientEmail("client" + i + "@example.com");
+
+            List<OrderItem> orderItems = new ArrayList<>();
+            IntStream.range(0, 10).forEach(j -> {
+                OrderItem item = new OrderItem();
+                item.setId(UUID.randomUUID());
+                item.setOrder(order);
+                item.setStock(stocks.get((int) (Math.random() * stocks.size())));
+                item.setQuantity((int) (Math.random() * 10) + 1);
+
+                double randomPrice = Math.random() * 100;
+                BigDecimal sellingPrice = new BigDecimal(Double.toString(randomPrice));
+                sellingPrice = sellingPrice.setScale(2, RoundingMode.HALF_UP);
+                item.setSellingPrice(sellingPrice.doubleValue());
+
+                orderItems.add(item);
+            });
+
+            order.setOrderItems(orderItems);
+            orderRepo.createOrder(order);
+        });
+    }
 
     @Override
     public OrderReadDto getOrderById(UUID id) {
@@ -124,19 +159,24 @@ public class OrderService implements IOrderService {
                 ));
     }
     private DailySalesReport calculateDailySalesReport(List<Order> orders) {
-        double totalSales = 0.0;
-        double totalProfit = 0.0;
+        BigDecimal totalSales = BigDecimal.ZERO;
+        BigDecimal totalProfit = BigDecimal.ZERO;
 
         for (Order order : orders) {
             for (OrderItem item : order.getOrderItems()) {
-                double sales = item.getQuantity() * item.getSellingPrice();
-                double cost = item.getQuantity() * item.getStock().getInputPrice();
-                double profit = sales - cost;
+                BigDecimal sales = BigDecimal.valueOf(item.getQuantity()).multiply(BigDecimal.valueOf(item.getSellingPrice()));
+                BigDecimal cost = BigDecimal.valueOf(item.getQuantity()).multiply(BigDecimal.valueOf(item.getStock().getInputPrice()));
+                BigDecimal profit = sales.subtract(cost);
 
-                totalSales += sales;
-                totalProfit += profit;
+                totalSales = totalSales.add(sales);
+                totalProfit = totalProfit.add(profit);
             }
         }
-        return new DailySalesReport(totalSales, totalProfit);
+
+        // Round totalSales and totalProfit to 2 decimal places
+        totalSales = totalSales.setScale(2, RoundingMode.HALF_UP);
+        totalProfit = totalProfit.setScale(2, RoundingMode.HALF_UP);
+
+        return new DailySalesReport(totalSales.doubleValue(), totalProfit.doubleValue());
     }
 }
