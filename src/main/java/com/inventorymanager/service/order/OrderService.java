@@ -16,7 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -100,5 +103,40 @@ public class OrderService implements IOrderService {
     @Override
     public void deleteOrder(UUID id) {
         orderRepo.deleteOrder(id);
+    }
+
+    @Override
+    public List<Order> getOrdersByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderRepo.getOrdersByDateRange(startDate,endDate);
+    }
+
+    @Override
+    public Map<LocalDate, DailySalesReport> getDailySalesReport(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Order> orders = getOrdersByDateRange(startDate, endDate);
+
+        return orders.stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getOrderDate().toLocalDate(),
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                this::calculateDailySalesReport
+                        )
+                ));
+    }
+    private DailySalesReport calculateDailySalesReport(List<Order> orders) {
+        double totalSales = 0.0;
+        double totalProfit = 0.0;
+
+        for (Order order : orders) {
+            for (OrderItem item : order.getOrderItems()) {
+                double sales = item.getQuantity() * item.getSellingPrice();
+                double cost = item.getQuantity() * item.getStock().getInputPrice();
+                double profit = sales - cost;
+
+                totalSales += sales;
+                totalProfit += profit;
+            }
+        }
+        return new DailySalesReport(totalSales, totalProfit);
     }
 }

@@ -28,7 +28,7 @@ public class Stock {
     @Column(columnDefinition = "VARCHAR(100)", length = 100, nullable = false)
     private String productId;
 
-    @Column(columnDefinition = "Number")
+    @Column(columnDefinition = "NUMERIC")
     private double inputPrice;
 
     @ManyToOne(fetch = FetchType.LAZY) //id only

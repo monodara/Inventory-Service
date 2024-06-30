@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,5 +42,10 @@ public class OrderRepo implements IOrderRepo {
     @Override
     public void deleteOrder(UUID id) {
         orderJpaRepo.deleteById(id);
+    }
+
+    @Override
+    public List<Order> getOrdersByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderJpaRepo.findByOrderDateBetween(startDate,endDate);
     }
 }
