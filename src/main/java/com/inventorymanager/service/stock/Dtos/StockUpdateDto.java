@@ -17,4 +17,5 @@ public class StockUpdateDto {
     private int quantity;
     @NotNull
     private UUID supplierId;
+    private double inputPrice;
 }

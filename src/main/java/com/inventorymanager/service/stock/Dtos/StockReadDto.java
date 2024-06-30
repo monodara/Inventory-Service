@@ -17,6 +17,7 @@ public class StockReadDto {
     private UUID id;
     private String productId;
     private int quantity;
+    private double inputPrice;
     @CsvIgnore
     private SupplierReadDto supplier;
 }

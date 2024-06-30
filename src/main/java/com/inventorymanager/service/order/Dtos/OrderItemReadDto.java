@@ -16,7 +16,7 @@ import java.util.UUID;
 @Setter
 public class OrderItemReadDto {
     private UUID id;
-//    private UUID stockId;
     private StockReadDto stock;
     private int quantity;
+    private double sellingPrice;
 }

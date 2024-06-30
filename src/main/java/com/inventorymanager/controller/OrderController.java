@@ -1,11 +1,9 @@
 package com.inventorymanager.controller;
 
 import com.inventorymanager.controller.shared.SuccessResponseEntity;
-import com.inventorymanager.domain.order.Order;
 import com.inventorymanager.service.order.Dtos.OrderCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderReadDto;
-import com.inventorymanager.service.order.IOrdeService;
-import com.inventorymanager.service.order.Dtos.OrderReadDto;
+import com.inventorymanager.service.order.IOrderService;
 import com.inventorymanager.service.order.Dtos.OrderUpdateDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,7 @@ import java.util.UUID;
 @RequestMapping("api/v1/orders")
 public class OrderController {
     @Autowired
-    private IOrdeService orderService;
+    private IOrderService orderService;
 
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponseEntity<OrderReadDto>> getOrderById(@PathVariable UUID id) {

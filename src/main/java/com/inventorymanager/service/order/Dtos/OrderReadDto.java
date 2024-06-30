@@ -18,4 +18,5 @@ public class OrderReadDto {
     private LocalDateTime orderDate;
     private OrderStatus status;
     private List<OrderItemReadDto> orderItems;
+    private String clientEmail;
 }

@@ -1,15 +1,13 @@
 package com.inventorymanager.service.order;
 
-import com.inventorymanager.domain.order.Order;
 import com.inventorymanager.service.order.Dtos.OrderCreateDto;
 import com.inventorymanager.service.order.Dtos.OrderReadDto;
 import com.inventorymanager.service.order.Dtos.OrderUpdateDto;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface IOrdeService {
+public interface IOrderService {
     public OrderReadDto getOrderById(UUID id);
     public List<OrderReadDto> getAllOrders();
     public OrderReadDto createOrder(OrderCreateDto orderCreateDto);

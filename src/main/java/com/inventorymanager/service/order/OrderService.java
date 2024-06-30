@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderService implements IOrdeService{
+public class OrderService implements IOrderService {
     @Autowired
     private IOrderRepo orderRepo;
     @Autowired

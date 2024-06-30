@@ -32,4 +32,7 @@ public class OrderItem {
 
     @Column(columnDefinition = "INTEGER CHECK (quantity >= 0)", nullable = false)
     private int quantity;
+
+    @Column(columnDefinition = "Number")
+    private double sellingPrice;
 }

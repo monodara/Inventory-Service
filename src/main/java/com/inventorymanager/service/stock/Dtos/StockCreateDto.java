@@ -18,4 +18,5 @@ public class StockCreateDto {
     private int quantity;
     @NotNull
     private UUID supplierId;
+    private double inputPrice;
 }

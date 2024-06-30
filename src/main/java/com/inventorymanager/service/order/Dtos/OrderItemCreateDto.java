@@ -17,4 +17,6 @@ public class OrderItemCreateDto {
     @NotNull
     @Positive(message = "The quantity of order item must be greater than 0.")
     private int quantity;
+    @Positive
+    private double sellingPrice;
 }
